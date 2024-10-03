@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Styles */
+
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fff0f0;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 50px 0;
+            background: linear-gradient(135deg, #ff3366, #ff6b6b);
+            color: white;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Section Titles */
+        h2 {
+            color: #ff3366;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Subtle Prompt Styling */
+        .subtle-prompt {
+            color: #ff6b6b;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Text Bubble Section */
+        .bubble-section {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start; /* Align the bubble to the left */
+            margin-top: 50px;
+            padding-left: 20px; /* Adjust the space from the left edge */
+        }
+
+        /* Text Bubble Style */
+        .text-bubble {
+            display: inline-block;
+            background-color: #5298de;
+            color: white;
+            border-radius: 20px 20px 20px 0px; /* Rounded bubble with a pointer on the right */
+            padding: 15px 30px;
+            font-size: 20px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+
+        /* Animate the bubble when it enters the viewport */
+        .bubble-section.scrolled .text-bubble {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Add a pulsing effect when hovered */
+        .text-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        /* Animation effect when scrolling */
+        @keyframes bubble-appear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* First Date Section */
+        .first-date {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 60px 0;
+            padding: 40px;
+            background-color: #ffd1d1;
+            border-radius: 15px;
+            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-left img {
+            width: 100%;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            margin-left: 80px; /* Move the image slightly to the right */
+        }
+
+        .image-left img:hover {
+            transform: scale(1.05);
+        }
+
+        .text-right {
+            max-width: 45%;
+            padding-right: 150px; /* Move the text slightly to the left */
+            font-size: 1.2em;
+        }
+
+        /* Timeline Section */
+        .timeline {
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .timeline-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-gap: 40px;
+            justify-items: center;
+        }
+
+        .timeline-event {
+            position: relative;
+        }
+
+        .hidden-folder {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+			cursor: pointer;
+        }
+
+        .image-gallery img {
+            height: 100px; /* Adjust the height as needed */
+            width: auto;   /* Let the width adjust to maintain aspect ratio */
+            margin: 10px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Polaroid Style */
+        .polaroid {
+            background-color: white;
+            padding: 10px 10px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            width: 200px; /* Set a fixed width or adjust as needed */
+            margin: 20px;
+            transform-origin: center;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .polaroid .caption {
+            position: absolute;
+            bottom: 10px; /* Adjust to align with padding */
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px; /* Adjust font size as needed */
+            font-family: 'Courier New', Courier, monospace; /* Gives a typewriter effect */
+            color: #333;
+        }
+
+        .polaroid:hover {
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        /* Rotation Classes */
+        .rotate-left {
+            transform: rotate(-5deg);
+        }
+
+        .rotate-right {
+            transform: rotate(5deg);
+        }
+
+        .rotate-center {
+            transform: rotate(0deg);
+        }
+
+        /* Letter Section */
+        .letter-section {
+            text-align: center;
+            margin: 120px 0;
+        }
+
+        .letter button {
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .letter button:hover {
+            background-color: #ff6b6b;
+            transform: scale(1.05);
+        }
+
+        .hidden-letter {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        video {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animation Styling */
+        .fade-in {
+            opacity: 0;
+            animation: fade-in 1.5s forwards;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-in-left {
+            transform: translateX(-100%);
+            opacity: 0;
+            animation: slide-in-left 1.5s forwards;
+        }
+
+        @keyframes slide-in-left {
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in-right {
+            transform: translateX(100%);
+            opacity: 0;
+            animation: slide-in-right 1.5s forwards;
+        }
+
+        @keyframes slide-in-right {
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .zoom-in {
+            transform: scale(0.5);
+            opacity: 0;
+            animation: zoom-in 1.5s forwards;
+        }
+
+        @keyframes zoom-in {
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Falling Hearts */
+        @keyframes falling {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 20px;
+            color: #ff3366;
+            z-index: 9999;
+            animation: falling 15s linear infinite;
+            will-change: transform, opacity;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .first-date {
+                flex-direction: column;
+            }
+
+            .text-right {
+                max-width: 100%;
+                padding-left: 0;
+                margin-top: 20px;
+            }
+
+            .image-gallery img {
+                width: 100%;
+            }
+        }
+		
+        /* Letter Section */
+        .letter-section {
+            text-align: center;
+            margin: 120px 0;
+        }
+
+        .letter {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 250px; /* Adjust to the width of your envelope image */
+            height: 180px; /* Adjust to the height of your envelope image */
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .envelope {
+            width: 100%;
+            height: 100%;
+            background-image: url('images/envelope-closed.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.6s ease;
+        }
+
+        .letter.open .envelope {
+            background-image: url('images/envelope-open.png');
+        }
+
+        .hidden-letter {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid #ff6b6b;
+            border-radius: 5px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .letter.open .hidden-letter {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hidden-letter h3 {
+            margin-top: 0;
+            font-family: 'Playfair Display', serif;
+            color: #ff3366;
+        }
+
+        /* Smooth Video Animation */
+        .hidden-letter video {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            transition-delay: 0.10s; /* Delay the video animation slightly */
+        }
+
+        .letter.open .hidden-letter video {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        video {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            font-size: 20px;
+            color: #ff6b6b;
+            animation: float-up 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -200px);
+                opacity: 0;
+            }
+        
+		 @keyframes float-up {
+            0% {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -200px);
+                opacity: 0;
+            }
+        }
+		
+		/* Modal styling */
+		.image-modal {
+			display: none; /* Hidden by default */
+			position: fixed;
+			z-index: 1000; /* Sit on top of other content */
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%) scale(0.8); /* Center and scale down initially */
+			max-width: 80%; /* Adjust the modal width */
+			max-height: 80%; /* Adjust the modal height */
+			background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent background */
+			box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+			border-radius: 10px;
+			overflow: hidden;
+			transition: all 0.3s ease; /* Smooth transition */
+		}
+
+		.image-modal.show {
+			transform: translate(-50%, -50%) scale(1); /* Scale up when shown */
+		}
+
+		.modal-image {
+			display: block;
+			max-width: 100%;
+			max-height: 100%;
+			margin: auto;
+		}
+
+		.close-modal {
+			position: absolute;
+			top: 10px;
+			right: 15px;
+			color: #333;
+			font-size: 30px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: color 0.3s ease;
+		}
+
+		.close-modal:hover {
+			color: #ff3366;
+		}
+
+		/* Optional: Dim background when modal is open */
+		body.modal-open::before {
+			content: '';
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			z-index: 999; /* Below the modal */
+		}
+
+
+
+    </style>
+</head>
+<body>
+<!-- Image Modal -->
+<div id="imageModal" class="image-modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-image" id="modalImage" src="" alt="">
+</div>
+
+
+    <div class="container">
+        <header class="fade-in">
+            <h1>Dear Vincent</h1>
+        </header>
+
+        <section class="first-date">
+            <div class="image-left slide-in-left">
+                <img src="images/pookie.png" alt="The First Time We Met" class="rounded-image" style="width: 200px; height: auto;">
+            </div>
+            <div class="text-right slide-in-right">
+                <h2>The First Time We Met</h2>
+                <p>I was so excited and nervous to see you, exactly one year ago today. When I saw you I got so shy, and I wanted to kiss you.</p>
+            </div>
+        </section>
+
+        <section class="bubble-section">
+            <div class="text-bubble">
+                I love you, pookie ❤️
+            </div>
+        </section>
+
+        <section class="bubble-section">
+            <div class="text-bubble">
+                You're the peanut butter to my jelly.
+            </div>
+        </section>
+
+        <section class="timeline fade-in">
+            <h2>One Year Together</h2>
+            <p>Click the picture to reveal more memories!</p>
+
+            <div class="timeline-container">
+                <!-- Event 1 -->
+                <div class="timeline-event">
+                    <div class="timeline-image zoom-in">
+                        <div class="polaroid rotate-left" onclick="toggleFolder('moment-folder1')">
+                            <img src="images/special/IMG_1160.png" alt="Special Moments">
+                            <div class="caption">Special Moments</div>
+                        </div>
+                    </div>
+                    <div id="moment-folder1" class="hidden-folder">
+                        <p>The most memorable moments together...</p>
+                        <div class="image-gallery">
+						  <img src="images/special/IMG_0815.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/special/IMG_1192.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_1321.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_0599.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_0421.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_1907.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/special/IMG_2970.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_3228.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_3457.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/special/IMG_4117.png" alt="Trip 2" class="slide-in-right">
+						</div>
+					  </div>
+					</div>
+
+					<div class="timeline-image zoom-in" style="top: 15%; left: 70%;">
+					  <div class="polaroid-wrapper">
+						<div class="polaroid rotate-right" onclick="toggleFolder('moment-folder2')">
+						  <img src="images/grand/IMG_1192.png" alt="Grand Canyon">
+						  <div class="caption">Grand Canyon</div>
+						</div>
+					  </div>
+					<div id="moment-folder2" class="hidden-folder">
+						<p>When we went to Grand Canyon...</p>
+						<div class="image-gallery">
+						  <img src="images/grand/IMG_1120.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/grand/IMG_1134.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1184.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1419.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1286.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1314.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/grand/IMG_1535.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1323.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1396.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/grand/IMG_1556.png" alt="Trip 2" class="slide-in-right">
+						</div>
+					  </div>
+					</div>
+
+					<div class="timeline-image zoom-in" style="top: 15%; left: 30%;">
+					  <div class="polaroid-wrapper">
+						<div class="polaroid rotate-center" onclick="toggleFolder('moment-folder3')">
+						  <img src="images/four/IMG_1755.png" alt="Grand Canyon">
+						  <div class="caption">Four Corners</div>
+					  </div>
+					</div>
+					<div id="moment-folder3" class="hidden-folder">
+						<p>When we went to Four Corners...</p>
+						<div class="image-gallery">
+						  <img src="images/four/IMG_1658.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/four/IMG_1685.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1790.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1839.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1944.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1860.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/four/IMG_1926.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1907.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1947.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/four/IMG_1755.png" alt="Trip 2" class="slide-in-right">
+						</div>
+					  </div>
+					</div>
+
+					<div class="timeline-image zoom-in" style="top: 15%; left: 50%;">
+					  <div class="polaroid-wrapper">
+						<div class="polaroid rotate-left" onclick="toggleFolder('moment-folder4')">
+						  <img src="images/texas/IMG_2361.png" alt="Grand Canyon">
+						  <div class="caption">White Sands</div>
+					  </div>
+					</div>
+					<div id="moment-folder4" class="hidden-folder">
+						<p>When we went to Texas, Alburquerque and White Sands...</p>
+						<div class="image-gallery">
+						  <img src="images/texas/IMG_2065.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/texas/IMG_2099.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2187.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2222.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2267.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2286.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/texas/IMG_2326.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2393.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2439.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/texas/IMG_2463.jpg" alt="Trip 2" class="slide-in-right">
+						</div>
+					  </div>
+					</div>
+
+					<div class="timeline-image zoom-in" style="top: 55%; left: 40%;">
+					  <div class="polaroid-wrapper">
+						<div class="polaroid rotate-right" onclick="toggleFolder('moment-folder5')">
+						  <img src="images/nyc/IMG_4084.png" alt="Grand Canyon">
+						  <div class="caption">New York, NY</div>
+					  </div>
+					</div>
+					<div id="moment-folder5" class="hidden-folder">
+						<p>When we went to NYC...</p>
+						<div class="image-gallery">
+						  <img src="images/nyc/IMG_3465.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/nyc/IMG_3769.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_3785.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_3629.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_3825.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_4038.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/nyc/IMG_4275.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_4734.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_4751.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/nyc/IMG_4122.png" alt="Trip 2" class="slide-in-right">
+						</div>
+					  </div>
+					</div>
+
+					<div class="timeline-image zoom-in" style="top: 55%; left: 60%;">
+					  <div class="polaroid-wrapper">
+						<div class="polaroid rotate-left" onclick="toggleFolder('moment-folder6')">
+						  <img src="images/favorite/IMG_0597.png" alt="Grand Canyon">
+						  <div class="caption">Favorites</div>
+					  </div>
+					</div>
+					<div id="moment-folder6" class="hidden-folder">
+						<p>When we went to Grand Canyon...</p>
+						<div class="image-gallery">
+						  <img src="images/favorite/IMG_1751.png" alt="Trip 1" class="slide-in-left">
+						  <img src="images/favorite/IMG_3418.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/favorite/IMG_3465.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/favorite/IMG_4117.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/favorite/IMG_5541.png" alt="Trip 2" class="slide-in-right">
+						  <img src="images/favorite/IMG_5696.png" alt="Trip 1" class="slide-in-left">						  
+						</div>
+					  </div>
+					</div>
+				  </div>
+				</section>
+					</div>
+        <section class="letter-section fade-in">
+            <p>Open for a little surprise...</p>
+            <div class="letter" onclick="toggleLetter()">
+                <div class="envelope-wrapper">
+                    <div class="envelope"></div>
+                </div>
+                <div class="hidden-letter">
+                    <h3>My Dearest,</h3>
+                    <p>Thank you for all the beautiful moments we've shared...</p>
+                    <video controls>
+                        <source src="images/videoplayback.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <script>
+        function toggleFolder(folderId) {
+            var folder = document.getElementById(folderId);
+            folder.style.display = folder.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleLetter() {
+            var letter = document.getElementById('letter-content');
+            letter.style.display = letter.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 5 + 's'; // Between 5-8s
+            document.body.appendChild(heart);
+
+            // Remove the heart after the animation completes
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        // Create a new heart every 300ms
+        setInterval(createHeart, 300);
+		
+		function toggleFolder(id) {
+    var folder = document.getElementById(id);
+    if (folder.style.display === "none" || folder.style.display === "") {
+        folder.style.display = "block";
+    } else {
+        folder.style.display = "none";
+    }
+}
+
+document.addEventListener('scroll', function() {
+    const sections = document.querySelectorAll('.bubble-section');
+    
+    sections.forEach(section => {
+        const sectionPosition = section.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+
+        if (sectionPosition < screenPosition) {
+            section.classList.add('scrolled');
+        }
+    });
+});
+
+        // ... (existing JavaScript code) ...
+
+         function toggleLetter() {
+            var letter = document.querySelector('.letter');
+            letter.classList.toggle('open');
+
+            if (letter.classList.contains('open')) {
+                // Create floating hearts
+                createHearts();
+            }
+        }
+
+        function toggleLetter() {
+            var letter = document.querySelector('.letter');
+            letter.classList.toggle('open');
+
+            if (letter.classList.contains('open')) {
+                // Create floating hearts
+                createHearts();
+            }
+        }
+
+        function createHearts() {
+            var letter = document.querySelector('.letter');
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    let heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.innerHTML = '❤';
+                    heart.style.left = 50 + (Math.random() * 100 - 50) + '%';
+                    heart.style.fontSize = Math.random() * 10 + 10 + 'px';
+                    heart.style.animationDuration = Math.random() * 1 + 1 + 's';
+                    letter.appendChild(heart);
+
+                    // Remove the heart after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 2000);
+                }, i * 100);
+            }
+        }
+	
+	 document.addEventListener('DOMContentLoaded', function() {
+        // Get the modal elements
+        var modal = document.getElementById('imageModal');
+        var modalImg = document.getElementById('modalImage');
+        var closeBtn = document.querySelector('.close-modal');
+
+        // Get all images in the image galleries
+        var galleryImages = document.querySelectorAll('.image-gallery img');
+
+        // Loop through images and add click event
+        galleryImages.forEach(function(image) {
+            image.addEventListener('click', function() {
+                modalImg.src = this.src;
+                modalImg.alt = this.alt;
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                document.body.classList.add('modal-open'); // Dim background
+            });
+        });
+
+        // When the user clicks on the close button, close the modal
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('show');
+            setTimeout(function() {
+                modal.style.display = 'none';
+            }, 300); // Match the transition duration
+            document.body.classList.remove('modal-open'); // Restore background
+        });
+
+        // Optional: Close modal when clicking outside of the image
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeBtn.click();
+            }
+        });
+    });
+    </script>
+</body>
+</html>
